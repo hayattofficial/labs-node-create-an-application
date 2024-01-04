@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const path = require("path");
 const { createServer } = require("http");
+const { auth, requiresAuth } = require("express-openid-connect");
 
 
 const {
@@ -48,6 +49,7 @@ const expenses = [
     date: new Date(),
     description: "Coffee for a Coding Dojo session.",
     value: 42,
+authRequired: false,
   },
 ];
 
@@ -74,7 +76,7 @@ app.get("/expenses", async (req, res, next) => {
   res.render("expenses", {
     user: req.oidc && req.oidc.user,
     expenses,
-  });
+  }); requiresAuth(),
 });
 
 // catch 404 and forward to error handler
@@ -83,7 +85,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (er requiresAuth(),r, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = err;
 
